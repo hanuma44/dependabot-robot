@@ -23,6 +23,7 @@ updates:
   # --------------------------------------------------------------------------
   - package-ecosystem: "npm"
     directory: "/"
+    target-branch: "feature/dependabot-test"
 
     # SCHEDULING: daily | weekly | monthly
     # PRs land when Nashville devs are at their desks, not at 3 AM
@@ -99,6 +100,7 @@ updates:
   # --------------------------------------------------------------------------
   - package-ecosystem: "github-actions"
     directory: "/"
+    target-branch: "main"
     schedule:
       interval: "weekly"
       day: "monday"
