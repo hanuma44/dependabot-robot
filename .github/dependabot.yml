@@ -1,0 +1,121 @@
+# ============================================================================
+# Dependabot Configuration - Globomantics Robot Fleet Manager
+# Pluralsight GHAS Course | Module 6: Dependabot Config, Rules & Dep Review
+# ============================================================================
+# KEY CONCEPT: version 2 is the ONLY valid schema version (exam tip!)
+# DOCS: https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+
+version: 2
+
+# ============================================================================
+# REGISTRIES: Private package sources (npm, Docker, Maven, etc.)
+# Uncomment if your org uses GitHub Packages, Artifactory, or similar.
+# ============================================================================
+# registries:
+#   npm-github:
+#     type: npm-registry
+#     url: https://npm.pkg.github.com
+#     token: ${{ secrets.GPR_TOKEN }}
+
+updates:
+  # --------------------------------------------------------------------------
+  # ECOSYSTEM 1: npm (Node.js dependencies from package.json)
+  # --------------------------------------------------------------------------
+  - package-ecosystem: "npm"
+    directory: "/"
+
+    # SCHEDULING: daily | weekly | monthly
+    # PRs land when Nashville devs are at their desks, not at 3 AM
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "America/Chicago" # Nashville, TN (Central Time)
+
+    # Cap open PRs to avoid flooding the team
+    open-pull-requests-limit: 10
+
+    # Labels for filtering and Actions-based automation
+    labels:
+      - "dependencies"
+      - "security"
+      - "automated"
+
+    # Structured commit messages for clean git history
+    # Produces: "deps(express): bump express from 4.17.1 to 4.18.2"
+    commit-message:
+      prefix: "deps"
+      include: "scope"
+
+    # -----------------------------------------------------------------------
+    # GROUPS: Combine related updates into fewer PRs
+    # Without grouping: 15 React packages = 15 PRs. With grouping: 1 PR.
+    # Three grouping strategies: patterns, update-types, dependency-type
+    # -----------------------------------------------------------------------
+    groups:
+      # Production minor+patch in one PR (low-risk batch)
+      production-minor-patch:
+        dependency-type: "production"
+        update-types:
+          - "minor"
+          - "patch"
+
+      # Dev tooling updates batched separately
+      development-dependencies:
+        dependency-type: "development"
+        update-types:
+          - "minor"
+          - "patch"
+
+      # Pattern-based: group all Express-related packages together
+      express-ecosystem:
+        patterns:
+          - "express*"
+          - "body-parser"
+          - "cookie-parser"
+          - "cors"
+          - "helmet"
+
+    # -----------------------------------------------------------------------
+    # VERSIONING STRATEGY: How Dependabot picks target versions
+    # Options: lockfile-only | auto | widen | increase | increase-if-necessary
+    # -----------------------------------------------------------------------
+    versioning-strategy: auto
+
+    # -----------------------------------------------------------------------
+    # ALLOW / IGNORE: Fine-grained control over what gets updated
+    # -----------------------------------------------------------------------
+    # Only allow production + development dependency updates
+    allow:
+      - dependency-type: "all"
+
+    # Ignore major bumps for packages that need manual migration
+    ignore:
+      - dependency-name: "sqlite3"
+        update-types: ["version-update:semver-major"]
+
+  # --------------------------------------------------------------------------
+  # ECOSYSTEM 2: GitHub Actions (keep CI/CD workflows current)
+  # EXAM TIP: github-actions is a valid ecosystem -- often forgotten!
+  # --------------------------------------------------------------------------
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "America/Chicago"
+
+    labels:
+      - "dependencies"
+      - "ci-cd"
+      - "automated"
+
+    commit-message:
+      prefix: "ci"
+      include: "scope"
+
+    groups:
+      # Batch all Actions updates into a single weekly PR
+      actions-all:
+        patterns:
+          - "*"

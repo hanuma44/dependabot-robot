@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(chmod:*)",
+      "Bash(./example-files/manage-dependabot.sh:*)",
+      "Bash(bash:*)",
+      "Bash(grep:*)",
+      "Bash(gh repo view:*)",
+      "Read(//l/Dropbox-2025/Dropbox/pluralsight/tim-warner \\(1\\)/GH-500-Updates/dependency-review-update/dependency-review-update-m6/**)",
+      "mcp__microsoft-learn__microsoft_docs_search",
+      "Bash(unzip:*)",
+      "Read(//c/tmp/**)",
+      "Bash(git remote:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(gh api:*)",
+      "Bash(git push:*)"
+    ],
+    "deny": [],
+    "additionalDirectories": [
+      "c:\\github\\globomantics-robot-fleet\\.claude",
+      "c:\\github\\globomantics-robot-fleet\\.claude\\skills"
+    ]
+  }
+}
