@@ -23,13 +23,12 @@ updates:
   # --------------------------------------------------------------------------
   - package-ecosystem: "npm"
     directory: "/"
-    target-branch: "feature/dependabot-test"
+    target-branch: "main"
 
     # SCHEDULING: daily | weekly | monthly
     # PRs land when Nashville devs are at their desks, not at 3 AM
     schedule:
       interval: "daily"
-      time: "09:00"
       timezone: "America/Chicago" # Nashville, TN (Central Time)
 
     # Cap open PRs to avoid flooding the team
