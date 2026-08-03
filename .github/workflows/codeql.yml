@@ -37,10 +37,10 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@v4
+        uses: github/codeql-action/init@v4.37.4
         with:
           languages: ${{ matrix.language }}
           # security-extended includes additional queries beyond the default suite
@@ -49,10 +49,10 @@ jobs:
       # Autobuild not required for JavaScript (interpreted language),
       # but CodeQL will auto-detect and trace the source files
       - name: Autobuild
-        uses: github/codeql-action/autobuild@v4
+        uses: github/codeql-action/autobuild@v4.37.4
 
       - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v4
+        uses: github/codeql-action/analyze@v4.37.4
         with:
           category: "/language:${{ matrix.language }}"
 
@@ -79,14 +79,14 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Run Semgrep scan
         run: semgrep scan --config p/security-audit --config p/rust --sarif > semgrep.sarif
 
       # upload-sarif lives in the codeql-action repo — same repo, different action
       - name: Upload SARIF results
-        uses: github/codeql-action/upload-sarif@v4
+        uses: github/codeql-action/upload-sarif@v4.37.4
         if: always()
         with:
           sarif_file: semgrep.sarif
